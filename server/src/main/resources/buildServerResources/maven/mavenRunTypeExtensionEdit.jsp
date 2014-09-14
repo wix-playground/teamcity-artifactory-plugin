@@ -47,6 +47,7 @@
                 $('org.jfrog.artifactory.selectedDeployableServer.deployerUsername').value = '';
                 $('secure:org.jfrog.artifactory.selectedDeployableServer.deployerPassword').value = '';
                 $('org.jfrog.artifactory.selectedDeployableServer.deployArtifacts').checked = false;
+                $('org.jfrog.artifactory.selectedDeployableServer.deployDefaultBranchOnly').checked = true;
                 $('org.jfrog.artifactory.selectedDeployableServer.deployIncludePatterns').value = '';
                 $('org.jfrog.artifactory.selectedDeployableServer.deployExcludePatterns').value = '';
                 $('org.jfrog.artifactory.selectedDeployableServer.publishBuildInfo').checked = true;
@@ -78,6 +79,7 @@
                 BS.Util.hide($('deployerUsername.container'));
                 BS.Util.hide($('deployerPassword.container'));
                 BS.Util.hide($('deployArtifacts.container'));
+                BS.Util.hide($('deployDefaultBranchOnly.container'));
                 BS.Util.hide($('deployIncludePatterns.container'));
                 BS.Util.hide($('deployExcludePatterns.container'));
                 BS.Util.hide($('publishBuildInfo.container'));
@@ -104,6 +106,7 @@
 
                 if (!foundExistingConfig) {
                     $('org.jfrog.artifactory.selectedDeployableServer.deployArtifacts').checked = true;
+                    $('org.jfrog.artifactory.selectedDeployableServer.deployDefaultBranchOnly').checked = true;
                     $('org.jfrog.artifactory.selectedDeployableServer.publishBuildInfo').checked = true;
                     $('org.jfrog.artifactory.selectedDeployableServer.envVarsExcludePatterns').value = '*password*,*secret*';
                     $('org.jfrog.artifactory.selectedDeployableServer.overrideDefaultDeployerCredentials').checked =
@@ -120,6 +123,7 @@
                 }
                 BS.Util.show($('deployArtifacts.container'));
                 if (BS.artifactory.isDeployArtifactsSelected()) {
+                    BS.Util.show($('deployDefaultBranchOnly.container'));
                     BS.Util.show($('deployIncludePatterns.container'));
                     BS.Util.show($('deployExcludePatterns.container'));
                 }
@@ -336,6 +340,8 @@ display:inline-block;
         <jsp:param name="deployArtifactsHelp"
                    value="Uncheck if you do not wish to deploy Maven artifacts from the plugin (a more efficient alternative to
                 Mavens own deploy goal)."/>
+        <jsp:param name="deployDefaultBranchOnlyLabel" value="Deploy default branch only"/>
+        <jsp:param name="deployDefaultBranchOnlyHelp" value="Uncheck if you wish to specify which branches should be deployed"/>
     </jsp:include>
 
     <tr class="noBorder" id="publishBuildInfo.container"

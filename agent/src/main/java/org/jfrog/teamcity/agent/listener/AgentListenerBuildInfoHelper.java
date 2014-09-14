@@ -123,40 +123,48 @@ public class AgentListenerBuildInfoHelper {
 
         ArtifactoryBuildInfoClient infoClient = getBuildInfoClient(selectedServerUrl, runnerParams, logger);
 
-        try {
-            List<DeployDetailsArtifact> deployableArtifacts = extractedBuildInfo.getDeployableArtifacts();
-            if (!deployableArtifacts.isEmpty()) {
+        Boolean deployDefaultBranchOnly = Boolean.parseBoolean(runnerParams.get(RunnerParameterKeys.DEPLOY_DEFAULT_BRANCH_ONLY));
+        Boolean isDefaultBranch = Boolean.parseBoolean(runner.getConfigParameters().get(IS_DEFAULT_BRANCH));
 
-                boolean skipIncludeExcludeChecks = RunTypeUtils.isGenericRunType(runType, runnerParams);
-                IncludeExcludePatterns patterns = new IncludeExcludePatterns(
-                        runnerParams.get(RunnerParameterKeys.DEPLOY_INCLUDE_PATTERNS),
-                        runnerParams.get(RunnerParameterKeys.DEPLOY_EXCLUDE_PATTERNS));
+        if (isDefaultBranch || !deployDefaultBranchOnly) {
+            try {
+                List<DeployDetailsArtifact> deployableArtifacts = extractedBuildInfo.getDeployableArtifacts();
+                if (!deployableArtifacts.isEmpty()) {
 
-                logger.progressStarted("Deploying artifacts to " + selectedServerUrl);
-                for (DeployDetailsArtifact deployableArtifact : deployableArtifacts) {
+                    boolean skipIncludeExcludeChecks = RunTypeUtils.isGenericRunType(runType, runnerParams);
+                    IncludeExcludePatterns patterns = new IncludeExcludePatterns(
+                            runnerParams.get(RunnerParameterKeys.DEPLOY_INCLUDE_PATTERNS),
+                            runnerParams.get(RunnerParameterKeys.DEPLOY_EXCLUDE_PATTERNS));
 
-                    String deploymentPath = deployableArtifact.getDeploymentPath();
-                    if (!skipIncludeExcludeChecks && PatternMatcher.pathConflicts(deploymentPath, patterns)) {
-                        logger.progressMessage("Skipping the deployment of '" + deploymentPath +
-                                "' due to the defined include-exclude patterns.");
-                        continue;
-                    }
-                    try {
-                        infoClient.deployArtifact(deployableArtifact.getDeployDetails());
-                    } catch (IOException e) {
-                        throw new RuntimeException("Error deploying artifact: " + deployableArtifact.getFile() +
-                                ".\n Skipping deployment of remaining artifacts (if any) and build info.", e);
+                    logger.progressStarted("Deploying artifacts to " + selectedServerUrl);
+                    for (DeployDetailsArtifact deployableArtifact : deployableArtifacts) {
+
+                        String deploymentPath = deployableArtifact.getDeploymentPath();
+                        if (!skipIncludeExcludeChecks && PatternMatcher.pathConflicts(deploymentPath, patterns)) {
+                            logger.progressMessage("Skipping the deployment of '" + deploymentPath +
+                                    "' due to the defined include-exclude patterns.");
+                            continue;
+                        }
+                        try {
+                            infoClient.deployArtifact(deployableArtifact.getDeployDetails());
+                        } catch (IOException e) {
+                            throw new RuntimeException("Error deploying artifact: " + deployableArtifact.getFile() +
+                                    ".\n Skipping deployment of remaining artifacts (if any) and build info.", e);
+                        }
                     }
                 }
-            }
 
-            String publishBuildInfoValue = runnerParams.get(RunnerParameterKeys.PUBLISH_BUILD_INFO);
-            if (Boolean.parseBoolean(publishBuildInfoValue)) {
-                publishBuildInfoToTeamCityServer(build, extractedBuildInfo.getBuildInfo());
-                sendBuildInfo(build, extractedBuildInfo.getBuildInfo(), infoClient);
+                String publishBuildInfoValue = runnerParams.get(RunnerParameterKeys.PUBLISH_BUILD_INFO);
+                if (Boolean.parseBoolean(publishBuildInfoValue)) {
+                    publishBuildInfoToTeamCityServer(build, extractedBuildInfo.getBuildInfo());
+                    sendBuildInfo(build, extractedBuildInfo.getBuildInfo(), infoClient);
+                }
+            } finally {
+                infoClient.shutdown();
             }
-        } finally {
-            infoClient.shutdown();
+        }
+        else {
+            logger.message("Skipping deployment because this is not the default branch");
         }
     }
 

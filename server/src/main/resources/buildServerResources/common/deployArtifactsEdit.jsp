@@ -25,6 +25,10 @@
        value="${(not empty propertiesBean.properties['org.jfrog.artifactory.selectedDeployableServer.deployArtifacts'])
        && (propertiesBean.properties['org.jfrog.artifactory.selectedDeployableServer.deployArtifacts'] == true) ? true : false}"/>
 
+<c:set var="deployDefaultBranchOnlySelected"
+       value="${(not empty propertiesBean.properties['org.jfrog.artifactory.selectedDeployableServer.deployDefaultBranchOnly'])
+       && (propertiesBean.properties['org.jfrog.artifactory.selectedDeployableServer.deployDefaultBranchOnly'] == true) ? true : false}"/>
+
 <c:set var="toggleAction" value="${param.toggleAction}" scope="request"/>
 <c:set var="shouldDisplayDeployArtifacts" value="${param.shouldDisplay}" scope="request"/>
 <c:set var="shouldDisplayPatternFields" value="${shouldDisplayDeployArtifacts && foundDeployArtifactsSelected}"
@@ -41,6 +45,21 @@
                                 onclick="${toggleAction}"/>
             <span class="smallNote">
                 <%= request.getParameter("deployArtifactsHelp")%>
+            </span>
+    </td>
+</tr>
+
+<tr class="noBorder" id="deployDefaultBranchOnly.container" style="${shouldDisplayDeployArtifacts ? '' : 'display: none;'}">
+    <th>
+        <label for="org.jfrog.artifactory.selectedDeployableServer.deployDefaultBranchOnly">
+            <%= request.getParameter("deployDefaultBranchOnlyLabel")%>:
+        </label>
+    </th>
+    <td>
+        <props:checkboxProperty name="org.jfrog.artifactory.selectedDeployableServer.deployDefaultBranchOnly"
+                                onclick="${toggleAction}"/>
+            <span class="smallNote">
+                <%= request.getParameter("deployDefaultBranchOnlyHelp")%>
             </span>
     </td>
 </tr>

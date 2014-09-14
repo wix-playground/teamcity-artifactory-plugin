@@ -68,6 +68,8 @@ public class ConstantValues {
     public static final String GRADLE_PARAM_TASKS = "ui.gradleRunner.gradle.tasks.names";
     public static final String GRADLE_PARAM_OPTIONS = "ui.gradleRunner.additional.gradle.cmd.params";
 
+    public static final String IS_DEFAULT_BRANCH = "teamcity.build.branch.is_default";
+
     /**
      * Git plugin configuration constants (taken from jetbrains.buildServer.buildTriggers.vcs.git.Constants)
      */

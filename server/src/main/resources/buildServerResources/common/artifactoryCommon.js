@@ -214,10 +214,13 @@ BS.artifactory = {
 
     toggleDeployArtifactsSelection: function () {
         if (BS.artifactory.isDeployArtifactsSelected()) {
+            BS.Util.show($('deployDefaultBranchOnly.container'));
             BS.Util.show($('deployIncludePatterns.container'));
             BS.Util.show($('deployExcludePatterns.container'));
         }
         else {
+            BS.Util.hide($('deployDefaultBranchOnly.container'));
+            $('org.jfrog.artifactory.selectedDeployableServer.deployDefaultBranchOnly').checked = true;
             BS.Util.hide($('deployIncludePatterns.container'));
             $('org.jfrog.artifactory.selectedDeployableServer.deployIncludePatterns').value = '';
             BS.Util.hide($('deployExcludePatterns.container'));

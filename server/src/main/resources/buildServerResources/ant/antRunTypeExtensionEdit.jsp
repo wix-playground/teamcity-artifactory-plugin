@@ -51,6 +51,7 @@ BS.local = {
             $('secure:org.jfrog.artifactory.selectedDeployableServer.deployerPassword').value = '';
             $('org.jfrog.artifactory.selectedDeployableServer.activateIvyIntegration').checked = false;
             $('org.jfrog.artifactory.selectedDeployableServer.deployArtifacts').checked = false;
+            $('org.jfrog.artifactory.selectedDeployableServer.deployDefaultBranchOnly').checked = true;
             $('org.jfrog.artifactory.selectedDeployableServer.deployIncludePatterns').value = '';
             $('org.jfrog.artifactory.selectedDeployableServer.deployExcludePatterns').value = '';
             $('org.jfrog.artifactory.selectedDeployableServer.publishBuildInfo').checked = true;
@@ -77,6 +78,7 @@ BS.local = {
             BS.Util.hide($('deployerUsername.container'));
             BS.Util.hide($('deployerPassword.container'));
             BS.Util.hide($('deployArtifacts.container'));
+            BS.Util.hide($('deployDefaultBranchOnly.container'))
             BS.Util.hide($('deployIncludePatterns.container'));
             BS.Util.hide($('deployExcludePatterns.container'));
             BS.Util.hide($('publishBuildInfo.container'));
@@ -118,6 +120,7 @@ BS.local = {
             if (BS.local.isActivateIvyIntegrationSelected()) {
                 BS.Util.show($('deployArtifacts.container'));
                 if (BS.artifactory.isDeployArtifactsSelected()) {
+                    BS.Util.show($('deployDefaultBranchOnly.container'));
                     BS.Util.show($('deployIncludePatterns.container'));
                     BS.Util.show($('deployExcludePatterns.container'));
                 }

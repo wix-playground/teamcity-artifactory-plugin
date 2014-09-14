@@ -22,6 +22,7 @@ public class RunnerParameterKeys {
     public final static String RESOLVER_USERNAME = PREFIX + "resolverUsername";
     public final static String RESOLVER_PASSWORD = "secure:" + PREFIX + "resolverPassword";
     public final static String DEPLOY_ARTIFACTS = PREFIX + "deployArtifacts";
+    public final static String DEPLOY_DEFAULT_BRANCH_ONLY = PREFIX + "deployDefaultBranchOnly";
     public final static String DEPLOY_INCLUDE_PATTERNS = PREFIX + "deployIncludePatterns";
     public final static String DEPLOY_EXCLUDE_PATTERNS = PREFIX + "deployExcludePatterns";
     public final static String USE_M2_COMPATIBLE_PATTERNS = PREFIX + "useM2CompatiblePatterns";
